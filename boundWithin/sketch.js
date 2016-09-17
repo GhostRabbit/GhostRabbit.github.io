@@ -33,7 +33,9 @@ function checkEdges() {
   }
   
   if (pos.dist(ipos) > (r - ir)) {
-    ipos = p5.Vector.add(pos, p5.Vector.sub(ipos, pos).limit(r - ir))
+    var edgePoint = p5.Vector.sub(pos, ipos)
+    edgePoint.limit(2 * (r - ir) - edgePoint.mag()) // Compensate for overshoot
+    ipos = p5.Vector.sub(pos, edgePoint)
     ivel.add(p5.Vector.sub(pos, ipos).normalize())
   }
 }
