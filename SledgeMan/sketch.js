@@ -13,7 +13,7 @@ function draw() {
     background(255, 0, 50)
     incrementGameState()
     drawObjects()
-    if (random() < 0.1) {
+    if (random() < 0.05) {
       monsters.push(createMonster())
     }
   } else if (gameState === "gameOver") {
@@ -41,7 +41,9 @@ function resetGame() {
 }
 
 function createMonster() {
-  var pos = p5.Vector.random2D().setMag(width + 100)
+  var pos = p5.Vector.random2D()
+    .setMag(sqrt(pow(width / 2, 2) + pow(height / 2, 2)) + 100)
+    .add(createVector(width / 2, height / 2))
   var r = random(5, 20)
   var c = random(255)
   return new Monster(pos, r, c)
@@ -69,8 +71,8 @@ function drawObjects() {
 
 function Player(x, y) {
   this.pos = createVector(x, y);
-  this.r = 10
-  this.maxSpeed = 8
+  this.r = 8
+  this.maxSpeed = 10
   
   this.update = function() {
     var mPos = createVector(mouseX, mouseY)
@@ -88,7 +90,7 @@ function Player(x, y) {
 function Sledge(x, y) {
   this.pos = createVector(x, y)
   this.vel = createVector()
-  this.r = 5
+  this.r = 10
 
   this.update = function() {
     this.vel.add(p5.Vector.sub(player.pos, this.pos).normalize())
