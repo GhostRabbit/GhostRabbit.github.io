@@ -52,7 +52,7 @@ function createMonster() {
 function incrementGameState() {
   player.update()
   sledge.update()
-  var i = monsters.length;
+  var i = monsters.length
   while (i--) {
     monsters[i].update()
     if (monsters[i].delete) {
@@ -70,7 +70,7 @@ function drawObjects() {
 }
 
 function Player(x, y) {
-  this.pos = createVector(x, y);
+  this.pos = createVector(x, y)
   this.r = 8
   this.maxSpeed = 10
   
