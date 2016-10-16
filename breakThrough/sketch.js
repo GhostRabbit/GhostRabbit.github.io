@@ -14,7 +14,7 @@ function draw() {
   } else {
     slider.update()
     ball.update()
-    if (ball.delete) {
+    if (ball.toBeDeleted) {
       gameState = "gameOver"
     }
   }
@@ -47,20 +47,22 @@ function Slider() {
 
 function Ball() {
   this.pos = createVector(width / 2, height / 2)
-  this.vel = createVector(1, -1).setMag(3)
-  this.r = 10
-  this.delete = false;
+  this.vel = createVector(0, -1).setMag(3)
+  this.r = 5
+  this.toBeDeleted = false;
   this.c = 255
+  
   
   this.update = function() {
     this.pos.add(this.vel)
     if (this.pos.x - this.r < 0 || this.pos.x + this.r > width) this.vel.x *= -1
     if (this.pos.y - this.r < 0) this.vel.y *= -1
-    if (this.pos.y + this.r > height) this.delete = true
-    if (slider.shouldBounce(this)) {
+    if (this.pos.y + this.r > height) this.toBeDeleted = true
+    if (slider.shouldBounce(this) && this.vel.y > 0) {
       this.vel.y *= -1
-      this.vel.x *= map(abs(this.pos.x - slider.pos.x), 0, 50, 0.5, 2.5) 
-      this.vel.setMag(3)
+      var dAngle = map(abs(this.pos.x - (slider.pos.x - 50)), 0, 100, -PI / 3 , PI / 3)
+      dAngle = constrain(dAngle + this.vel.heading(), -PI * 7 / 8, -PI / 8) - this.vel.heading()
+      this.vel.rotate(dAngle)
     }
   }
   
