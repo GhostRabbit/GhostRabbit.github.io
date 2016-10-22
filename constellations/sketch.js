@@ -1,8 +1,7 @@
 var stars = []
  
 function setup() {
-  createCanvas(1200, 800)
- 
+  createCanvas(displayWidth, displayHeight);
   createStarField()
 }
  
@@ -35,7 +34,7 @@ function draw() {
   })
 }
  
-function mousePressed() {
+function mouseReleased() {
   createStarField()
 }
  
