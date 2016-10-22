@@ -1,8 +1,8 @@
 var stars = []
  
 function setup() {
-  createCanvas(displayWidth, displayHeight);
-  createStarField()
+  createCanvas(windowWidth, windowHeight)
+  recreate = true;
 }
  
 function createStarField() {
@@ -28,6 +28,10 @@ function createStarField() {
 }
  
 function draw() {
+  if (recreate) {
+    createStarField()
+    recreate = false
+  }
   background(0, 0, 10)
   stars.forEach(function(star) {
     star.show()
@@ -35,7 +39,12 @@ function draw() {
 }
  
 function mouseReleased() {
-  createStarField()
+  recreate = true;
+}
+
+function windowResized() {
+	resizeCanvas(windowWidth, windowHeight)
+	recreate = true;
 }
  
 function Star(x, y) {
