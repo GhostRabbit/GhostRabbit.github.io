@@ -2,7 +2,7 @@ var gameState, player, sledge, monsters
 var maxSledgeSpeed = 15
 
 function setup() {
-  createCanvas(displayWidth, displayHeight)
+  createCanvas(windowWidth, windowHeight)
   colorMode(HSB)
   strokeWeight(3)
   resetGame()

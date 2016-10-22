@@ -40,6 +40,7 @@ function draw() {
  
 function mouseReleased() {
   recreate = true;
+  return false;
 }
 
 function windowResized() {
