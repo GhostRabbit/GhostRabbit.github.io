@@ -1,10 +1,11 @@
-var balls = []
-var blocks = []
+var shapes = []
 
 function setup() {
   createCanvas(windowWidth, windowHeight)
-  for (var i = 0; i < 50; i++) balls.push(new Ball())
-  for (var i = 0; i < 50; i++) balls.push(new Block())
+  for (var i = 0; i < 50; i++) {
+    shapes.push(new Ball())
+    shapes.push(new Block())
+  }
 }
 
 function windowResized() {
@@ -13,9 +14,9 @@ function windowResized() {
 
 function draw() {
   background(255)
-  balls.forEach(function(ball) {
-    ball.update()
-    ball.draw()
+  shapes.forEach(function(shape) {
+    shape.update()
+    shape.draw()
   })
 }
 
@@ -31,6 +32,7 @@ function Ball() {
   
   this.update = function() {
     this.pos.add(this.vel)
+    
     // If found offscreen, move towards screen
     if (this.pos.x < this.r) this.vel.x = abs(this.vel.x)
     if (this.pos.x > width - this.r) this.vel.x = -abs(this.vel.x)
