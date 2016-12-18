@@ -7,7 +7,7 @@ function Laser(pos, angle) {
     push()
     translate(this.pos.x, this.pos.y)
     rotate(this.angle)
-    line(0, 0, 10, 0)
+    line(0, 0, -10, 0)
     pop()
   }
   

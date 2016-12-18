@@ -8,6 +8,7 @@ function Ship() {
     push()
     translate(this.pos.x, this.pos.y)
     rotate(this.angle)
+    fill(0)
     triangle(12,  0,
             -12, -8,
             -12,  8)

@@ -1,8 +1,10 @@
 function newAsteroid() {
   // Do not spawn too close to ship, give 20% margin
   var pos = createVector(random(width * 0.8), random(height * 0.8))
-  if (pos.x > width * 0.4) pos.x += width * 0.2
-  if (pos.y > height * 0.4) pos.y += height * 0.2
+  var dx = 0.1 * width
+  if (abs(pos.x - ship.pos.x) < dx) pos.x += dx * 2
+  var dy = 0.1 * height
+  if (abs(pos.y - ship.pos.y) < dy) pos.y += dy * 2
   return new Asteroid(40, pos)
 }
 
@@ -41,6 +43,11 @@ function Asteroid(r, pos) {
 
     if (this.pos.y < 0) this.pos.y = height
     else if (this.pos.y > height) this.pos.y = 0
+  }
+  
+  this.split = function() {
+    if (r < 20) return []
+    return [new Asteroid(this.r / 2, this.pos.copy()), new Asteroid(this.r / 2, this.pos.copy())]
   }
   
 }
