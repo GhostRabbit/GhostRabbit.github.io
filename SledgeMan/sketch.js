@@ -65,6 +65,8 @@ function drawObjects() {
   monsters.forEach(function(monster) {
     monster.draw()
   })
+  stroke(0)
+  line(player.pos.x, player.pos.y, sledge.pos.x, sledge.pos.y)
   player.draw()
   sledge.draw()
 }
