@@ -3,7 +3,7 @@ var lasers = []
 var ship
 var gameState = "gameOn"
 var score = 0
-var adder
+var asteroidAdder
 
 function setup() {
     createCanvas(windowWidth, windowHeight)
@@ -13,9 +13,9 @@ function setup() {
     for (var i = 0; i < 10; i++) {
       asteroids.push(newAsteroid())
     }
-    adder = setInterval(function() {
+    asteroidAdder = setInterval(function() {
       if (gameState === 'gameOver') {
-         clearInterval(adder)
+        clearInterval(asteroidAdder)
       } else {
         asteroids.push(newAsteroid())
       }
@@ -90,5 +90,6 @@ function incrementGameState() {
 function keyPressed() {
   if (keyCode === 32) {  // Space
     lasers.push(ship.fire())
+    return false //Prevent default behaviours
   }
 }

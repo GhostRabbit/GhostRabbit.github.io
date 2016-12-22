@@ -26,11 +26,11 @@ function Ship() {
     if (this.pos.y < 0) this.pos.y = height
     else if (this.pos.y > height) this.pos.y = 0
     
-    this.engineOn = keyIsDown(UP_ARROW)
-    if (keyIsDown(LEFT_ARROW)) {
+    this.engineOn = keyIsDown(UP_ARROW) || keyIsDown(87) // 'w'
+    if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) { // 'a' 
       this.angle -= 0.05
     }
-    if (keyIsDown(RIGHT_ARROW)) {
+    if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) { // 'd'
       this.angle += 0.05
     }
     
