@@ -1,5 +1,6 @@
 var gameState, player, sledge, monsters
 var maxSledgeSpeed = 15
+var score
 
 function setup() {
   createCanvas(windowWidth, windowHeight)
@@ -13,6 +14,7 @@ function draw() {
     background(255, 0, 50)
     incrementGameState()
     drawObjects()
+    drawScore()
     if (random() < 0.05) {
       monsters.push(createMonster())
     }
@@ -32,6 +34,7 @@ function mousePressed() {
 
 function resetGame() {
   gameState = "gameOn"
+  score = 0
   player = new Player(width / 2, height / 2)
   sledge = new Sledge(width / 2 - 50, height / 2)
   monsters = []
@@ -69,6 +72,14 @@ function drawObjects() {
   line(player.pos.x, player.pos.y, sledge.pos.x, sledge.pos.y)
   player.draw()
   sledge.draw()
+}
+
+function drawScore() {
+  textSize(32)
+  textAlign(LEFT)
+  stroke(128)
+  fill(255)
+  text("Score " + score, 20, height - 30)
 }
 
 function Player(x, y) {
@@ -122,6 +133,7 @@ function Monster(pos, r, c) {
   this.update = function() {
     if (p5.Vector.dist(this.pos, sledge.pos) < this.r + sledge.r) {
       this.delete = true
+      score++
     }
     if (p5.Vector.dist(this.pos, player.pos) < this.r + player.r) {
       gameState = "gameOver"
