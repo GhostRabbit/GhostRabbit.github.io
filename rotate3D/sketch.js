@@ -9,11 +9,11 @@ function update()   {
 }
 
 function draw() {
-  update();
+  update()
   
   background(50)
   
-  translate(0, 0, mouseX) // Zoom
+  translate(0, 0, map(constrain(mouseX, 0, 400), 100, 300, -100, 50)) // Zoom
   rotateX(angle)
   rotateY(angle * 0.6)
   
