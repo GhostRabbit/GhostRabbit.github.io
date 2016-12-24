@@ -7,11 +7,13 @@ function setup() {
 
 function init(n) {  
   planets = []
+  colorMode(RGB)
   background(128)
   for (var i = 0; i < n; i++) {
     var pos = p5.Vector.fromAngle(i * TWO_PI / n).setMag(100)
     var v = p5.Vector.fromAngle(i * TWO_PI / n + HALF_PI).setMag(n / 2.0)
-    planets.push(new Planet(pos, v))
+    var c = i * 255.0 / n
+    planets.push(new Planet(pos, v, c))
   }
   setTimeout(function() {
     init(n + 1)  
@@ -19,7 +21,8 @@ function init(n) {
 }
 
 function draw() {
-  background(128, 128, 128, 0.01)
+//  colorMode(RGB)
+//  background(128, 128, 128, 5)
   push()
   translate(width / 2, height / 2)
   update()
@@ -46,13 +49,17 @@ function update() {
   }
 }
 
-function Planet(pos, v) {
+function Planet(pos, v, c) {
   this.pos = pos
   this.v = v
+  this.c = c
   this.r = 5;
   this.force = createVector()
   
   this.render = function() {
+    colorMode(HSB)
+    stroke((c + 128) % 255, 255, 255)
+    fill(c, 255, 255)
     ellipse(this.pos.x, this.pos.y, this.r * 2, this.r * 2)
   }
   
