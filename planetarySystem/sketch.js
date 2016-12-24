@@ -7,6 +7,7 @@ function setup() {
 
 function init(n) {  
   planets = []
+  background(128)
   for (var i = 0; i < n; i++) {
     var pos = p5.Vector.fromAngle(i * TWO_PI / n).setMag(100)
     var v = p5.Vector.fromAngle(i * TWO_PI / n + HALF_PI).setMag(n / 2.0)
@@ -18,7 +19,7 @@ function init(n) {
 }
 
 function draw() {
-  background(128)
+  background(128, 128, 128, 0.01)
   push()
   translate(width / 2, height / 2)
   update()
