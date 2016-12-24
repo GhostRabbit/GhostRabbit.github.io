@@ -2,12 +2,19 @@ var planets = []
 
 function setup() {
   createCanvas(windowWidth, windowHeight)
-  var n = 3
+  init(2)
+}
+
+function init(n) {  
+  planets = []
   for (var i = 0; i < n; i++) {
     var pos = p5.Vector.fromAngle(i * TWO_PI / n).setMag(100)
-    var v = p5.Vector.fromAngle(i * TWO_PI / n + HALF_PI)
+    var v = p5.Vector.fromAngle(i * TWO_PI / n + HALF_PI).setMag(n / 2.0)
     planets.push(new Planet(pos, v))
   }
+  setTimeout(function() {
+    init(n + 1)  
+  }, 10000);
 }
 
 function draw() {
@@ -41,10 +48,11 @@ function update() {
 function Planet(pos, v) {
   this.pos = pos
   this.v = v
+  this.r = 5;
   this.force = createVector()
   
   this.render = function() {
-    ellipse(this.pos.x, this.pos.y, 10, 10)
+    ellipse(this.pos.x, this.pos.y, this.r * 2, this.r * 2)
   }
   
   this.update = function() {
