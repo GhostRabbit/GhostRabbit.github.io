@@ -13,16 +13,10 @@ function draw() {
   if (gameState === "gameOn") {
     background(255, 0, 50)
     incrementGameState()
-    drawObjects()
-    drawScore()
-    if (random() < 0.05) {
-      monsters.push(createMonster())
-    }
+    renderObjects()
+    renderScore()
   } else if (gameState === "gameOver") {
-    textSize(32)
-    textAlign(CENTER)
-    fill(128, 255, 255)
-    text("Game Over, click to restart", width / 2, height / 2)
+    renderGameOver()
   }
 }
 
@@ -39,17 +33,8 @@ function resetGame() {
   sledge = new Sledge(width / 2 - 50, height / 2)
   monsters = []
   for (var i = 0; i < 15; i++) {
-    monsters.push(createMonster())
+    monsters.push(spawnMonster())
   }
-}
-
-function createMonster() {
-  var pos = p5.Vector.random2D()
-    .setMag(sqrt(pow(width / 2, 2) + pow(height / 2, 2)) + 100)
-    .add(createVector(width / 2, height / 2))
-  var r = random(5, 20)
-  var c = random(255)
-  return new Monster(pos, r, c)
 }
 
 function incrementGameState() {
@@ -62,83 +47,33 @@ function incrementGameState() {
       monsters.splice(i, 1)
     }
   }
+  if (random() < 0.05) {
+    monsters.push(spawnMonster())
+  }
 }
 
-function drawObjects() {
+function renderObjects() {
   monsters.forEach(function(monster) {
-    monster.draw()
+    monster.render()
   })
-  stroke(0)
+  stroke(25)
   line(player.pos.x, player.pos.y, sledge.pos.x, sledge.pos.y)
   player.draw()
-  sledge.draw()
+  sledge.render()
 }
 
-function drawScore() {
+function renderScore() {
   textSize(32)
   textAlign(LEFT)
-  stroke(128)
+  stroke(50)
   fill(255)
   text("Score " + score, 20, height - 30)
 }
 
-function Player(x, y) {
-  this.pos = createVector(x, y)
-  this.r = 8
-  this.maxSpeed = 10
-  
-  this.update = function() {
-    var mPos = createVector(mouseX, mouseY)
-    var vel = p5.Vector.sub(mPos, this.pos).limit(this.maxSpeed)  
-    this.pos.add(vel)
-  }
-  
-  this.draw = function() {
-    stroke(0)
-    fill(0, 255, 255)
-    ellipse(this.pos.x, this.pos.y, this.r * 2, this.r * 2)
-  }
+function renderGameOver() {
+  textSize(32)
+  textAlign(CENTER)
+  stroke(25)
+  fill(128, 255, 255)
+  text("Game Over, click to restart", width / 2, height / 2)
 }
-
-function Sledge(x, y) {
-  this.pos = createVector(x, y)
-  this.vel = createVector()
-  this.r = 10
-
-  this.update = function() {
-    this.vel.add(p5.Vector.sub(player.pos, this.pos).normalize())
-    this.vel.limit(maxSledgeSpeed)
-    this.pos.add(this.vel)
-  }
-  
-  this.draw = function() {
-    stroke(0)
-    fill(0)
-    ellipse(this.pos.x, this.pos.y, this.r * 2, this.r * 2)
-  }
-}
-
-function Monster(pos, r, c) {
-  this.pos = pos
-  this.r = r
-  this.c = c
-  this.delete = false
-  
-  this.draw = function() {
-    stroke((c + 128) % 255, 255, 255)
-    fill(c, 255, 255)
-    ellipse(this.pos.x, this.pos.y, this.r * 2, this.r * 2)
-  }
-  
-  this.update = function() {
-    if (p5.Vector.dist(this.pos, sledge.pos) < this.r + sledge.r) {
-      this.delete = true
-      score++
-    }
-    if (p5.Vector.dist(this.pos, player.pos) < this.r + player.r) {
-      gameState = "gameOver"
-    }
-    this.pos.add(p5.Vector.sub(player.pos, this.pos).setMag(2))
-  }
-}
-
