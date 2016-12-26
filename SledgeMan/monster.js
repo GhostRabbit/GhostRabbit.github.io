@@ -21,12 +21,19 @@ function Monster(pos, r, c) {
   
   this.update = function() {
     if (p5.Vector.dist(this.pos, sledge.pos) < this.r + sledge.r) {
-      this.delete = true
-      score++
+      this.die()
     }
     if (p5.Vector.dist(this.pos, player.pos) < this.r + player.r) {
       gameState = "gameOver"
     }
     this.pos.add(p5.Vector.sub(player.pos, this.pos).setMag(2))
+  }
+  
+  this.die = function() {
+      this.delete = true
+      for (var i = 0; i < 5; i++) {
+        animations.push(new Blood(this.pos.copy()))
+      }
+      score++
   }
 }

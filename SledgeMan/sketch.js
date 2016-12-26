@@ -1,4 +1,4 @@
-var gameState, player, sledge, monsters
+var gameState, player, sledge, monsters, animations
 var maxSledgeSpeed = 15
 var score
 
@@ -35,6 +35,7 @@ function resetGame() {
   for (var i = 0; i < 15; i++) {
     monsters.push(spawnMonster())
   }
+  animations = []
 }
 
 function incrementGameState() {
@@ -50,9 +51,19 @@ function incrementGameState() {
   if (random() < 0.05) {
     monsters.push(spawnMonster())
   }
+  var j = animations.length
+  while (j--) {
+    animations[j].update()
+    if (animations[j].delete) {
+      animations.splice(j, 1)
+    }
+  }
 }
 
 function renderObjects() {
+  animations.forEach(function(animation) {
+    animation.render()
+  })
   monsters.forEach(function(monster) {
     monster.render()
   })
