@@ -2,6 +2,8 @@ var img
 var spots = []
 var shapes = []
 
+var space = 2
+
 function preload() {
   img = loadImage("./data/linus.png",
   function() {
@@ -29,8 +31,6 @@ function setup() {
 function draw() {
   background(0)
   noFill()
-  //strokeWeight(2)
-  //stroke(255)
   noStroke()
   for (var i = 0; i < shapes.length; i++) {
     var shape = shapes[i]
@@ -42,6 +42,7 @@ function draw() {
     }
     shape.draw()
   }
+  
   for (var j = 0; j < 10; j ++) {
     newCircle()
   }
@@ -61,7 +62,7 @@ function newCircle() {
 function Circle(x, y) {
   this.x = x
   this.y = y
-  this.r = 2
+  this.r = space / 2
   this.growing = true
   
   this.grow = function() {
@@ -73,17 +74,17 @@ function Circle(x, y) {
   }
   
   this.nearEdge = function() {
-    return this.x - this.r <= 2    ||
-      this.x + this.r >= width - 2 ||
-      this.y - this.r <= 2         ||
-      this.y + this.r >= height -2
+    return this.x - this.r <= space     ||
+      this.x + this.r >= width - space  ||
+      this.y - this.r <= space          ||
+      this.y + this.r >= height - space
   }
   
   this.closeToAny = function(circles) {
     for (var i = 0; i < circles.length; i++) {
       var other = circles[i]
       if (other !== this) {
-        if (dist(this.x, this.y, other.x, other.y) < this.r + other.r + 4) {
+        if (dist(this.x, this.y, other.x, other.y) < this.r + other.r + space) {
           return true
         }
       }
