@@ -2,7 +2,9 @@ var img
 var spots = []
 var shapes = []
 
-var space = 2
+var space = 3
+
+var dx = 0
 
 function preload() {
   img = loadImage("./data/linus.png",
@@ -18,8 +20,8 @@ function setup() {
   colorMode(HSB)
   createCanvas(img.width, img.height)
   img.loadPixels()
-  for (var i = 0; i < img.width; i++) {
-    for (var j = 0; j < img.height; j++) {
+  for (var i = 0; i < img.width; i += space) {
+    for (var j = 0; j < img.height; j += space) {
       var loc = (i + j * img.width) * 4
       if (img.pixels[loc] + img.pixels[loc + 1] + img.pixels[loc + 2] > 500) {
         spots.push(createVector(i, j))
@@ -46,6 +48,8 @@ function draw() {
   for (var j = 0; j < 10; j ++) {
     newCircle()
   }
+  
+  dx += 5
 }
 
 function newCircle() {
@@ -93,7 +97,8 @@ function Circle(x, y) {
   }
   
   this.draw = function() {
-    var h = map(this.x, 100, width-100, 0, 255)
+    var h = map((this.x + dx) % width, 0, width, 0, 512)
+    if (h > 255) h = 512 - h
     fill(h, 255, 255)
     ellipse(this.x, this.y, this.r*2, this.r*2)
   }
