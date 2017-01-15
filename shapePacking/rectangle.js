@@ -27,26 +27,26 @@ function Rectangle(x, y) {
   }
   
   this.left = function() {
-    return this.x - this.w - space
+    return this.x - this.w - space / 2
   }
 
   this.right = function() {
-    return this.x + this.w + space
+    return this.x + this.w + space / 2
   }
   
   this.top = function() {
-    return this.y - this.h - space
+    return this.y - this.h - space / 2
   }
   
   this.bottom = function() {
-    return this.y + this.h + space
+    return this.y + this.h + space / 2
   }
   
   this.closeToAny = function(shapes) {
     for (var i = 0; i < shapes.length; i++) {
       var other = shapes[i]
       if (other !== this) {
-        if  (anyPointIn(this, other) || anyPointIn(other, this)) {
+        if (collidesWith(this, other) ) {
           return true
         }
       }
@@ -54,19 +54,9 @@ function Rectangle(x, y) {
     return false
   }
   
-  function anyPointIn(a, b) {
-    return pointIn(a.left(),  a.top(), b) ||
-           pointIn(a.right(), a.top(), b) ||
-           pointIn(a.left(),  a.bottom(), b) ||
-           pointIn(a.right(), a.bottom(), b)
-  }
-  
-  function pointIn(x, y, b) {
-    if (x > b.left() && x < b.right() &&
-        y < b.bottom() && y > b.top()) {
-      return true;
-    }
-    return false
+  function collidesWith(a, b) {
+   //Stolen from:   http://stackoverflow.com/questions/31022269/collision-detection-between-two-rectangles-in-java
+    return a.left() < b.right() && a.right() > b.left() && a.top() < b.bottom() && a.bottom() > b.top() 
   }
   
   this.draw = function() {

@@ -3,7 +3,7 @@ var spots = []
 var shapes = []
 
 var space = 3
-var shapesPerFrame = 8
+var shapesPerFrame = 4
 
 var dx = 0
 
@@ -32,9 +32,10 @@ function setup() {
 }
 
 function draw() {
-  background(0)
-  noFill()
-  stroke(255)
+background(0)
+noFill()  
+stroke(2)
+  
   for (var i = 0; i < shapes.length; i++) {
     var shape = shapes[i]
     if (shape.growing) {
@@ -46,7 +47,7 @@ function draw() {
     shape.draw()
   }
   for (var j = 0; j < shapesPerFrame; j ++) {
-    newShape(rectangelFactory)
+    newShape(rectangleFactory)
   }
   dx += 5
 }
@@ -55,7 +56,7 @@ function circleFactory(x, y) {
   return new Circle(x, y)
 }
 
-function rectangelFactory(x, y) {
+function rectangleFactory(x, y) {
   return new Rectangle(x, y)
 }
 
