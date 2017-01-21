@@ -7,6 +7,8 @@ var shapesPerFrame = 4
 
 var dx = 0
 
+var shapeFactory
+
 function preload() {
   img = loadImage("./data/linus.png",
   function() {
@@ -18,6 +20,7 @@ function preload() {
 }
 
 function setup() {
+  shapeFactory = function(x, y) { return new Rectangle(x,y) }
   colorMode(HSB)
   createCanvas(img.width, img.height)
   img.loadPixels()
@@ -38,26 +41,15 @@ stroke(2)
   
   for (var i = 0; i < shapes.length; i++) {
     var shape = shapes[i]
-    if (shape.growing) {
-      shape.grow()
-      if (shape.stopGrow(shapes)) {
-        shape.growing = false;
-      }
+    if (shape.growing()) {
+      shape.grow(shapes)
     }
     shape.draw()
   }
   for (var j = 0; j < shapesPerFrame; j ++) {
-    newShape(rectangleFactory)
+    newShape(shapeFactory)
   }
   dx += 5
-}
-
-function circleFactory(x, y) {
-  return new Circle(x, y)
-}
-
-function rectangleFactory(x, y) {
-  return new Rectangle(x, y)
 }
 
 function newShape(factory) {

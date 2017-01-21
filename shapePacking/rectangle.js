@@ -3,16 +3,28 @@ function Rectangle(x, y) {
   this.y = y
   this.w = space / 2
   this.h = space / 2
-  this.growing = true
+  this.growingW = true
+  this.growingH = true
   
   rectMode(CENTER)
   
-  this.grow = function() {
-    if (random(0, 1) < 0.5) {
-      this.w++;      
-    } else {
-      this.h++;
+  this.grow = function(shapes) {
+    if (this.growingW && random(0, 1) < 0.5) {
+      this.w++;
+      if (this.stopGrow(shapes)) {
+        this.growingW = false;
+      }
     }
+    if (this.growingH && random(0, 1) < 0.5) {
+      this.h++;
+      if (this.stopGrow(shapes)) {
+        this.growingH = false;
+      }
+    }
+  }
+  
+  this.growing = function() {
+    return this.growingW || this.growingH
   }
   
   this.stopGrow = function(shapes) {
