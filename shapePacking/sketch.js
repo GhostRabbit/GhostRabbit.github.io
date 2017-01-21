@@ -3,7 +3,7 @@ var spots = []
 var shapes = []
 
 var space = 3
-var shapesPerFrame = 4
+var shapesPerFrame = 8
 
 var dx = 0
 
@@ -23,6 +23,10 @@ function setup() {
   shapeFactory = function(x, y) { return new Rectangle(x,y) }
   colorMode(HSB)
   createCanvas(img.width, img.height)
+  preCalculateAvailableSpawningSpots(img, spots)
+}
+
+function preCalculateAvailableSpawningSpots(img, spots) {
   img.loadPixels()
   for (var i = 0; i < img.width; i += space) {
     for (var j = 0; j < img.height; j += space) {
@@ -35,9 +39,9 @@ function setup() {
 }
 
 function draw() {
-background(0)
-noFill()  
-stroke(2)
+  background(0)
+  noFill()  
+  stroke(2)
   
   for (var i = 0; i < shapes.length; i++) {
     var shape = shapes[i]

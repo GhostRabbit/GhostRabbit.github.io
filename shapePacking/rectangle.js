@@ -9,16 +9,18 @@ function Rectangle(x, y) {
   rectMode(CENTER)
   
   this.grow = function(shapes) {
-    if (this.growingW && random(0, 1) < 0.5) {
-      this.w++;
+    if (this.growingW) {
+      this.w++
       if (this.stopGrow(shapes)) {
-        this.growingW = false;
+        this.w--
+        this.growingW = false
       }
     }
-    if (this.growingH && random(0, 1) < 0.5) {
-      this.h++;
+    if (this.growingH) {
+      this.h++
       if (this.stopGrow(shapes)) {
-        this.growingH = false;
+        this.h--
+        this.growingH = false
       }
     }
   }
