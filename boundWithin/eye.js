@@ -1,15 +1,22 @@
 function Eye(pos, r) {
   this.pos = pos.copy();
-  this.ipos = pos.copy();
   this.vel = p5.Vector.random2D();
-  this.ivel = p5.Vector.random2D();
-  
+  this.a = createVector(0, 0);
   this.r = r;
+  
+  this.ipos = pos.copy();
+  this.ivel = p5.Vector.random2D();
+  this.ia = createVector(0, 0);  
   this.ir = 0.4 * r;
 }
 
 Eye.prototype.update = function (others) {
+  this.vel.add(this.a);
+  this.a.mult(0);
   this.pos.add(this.vel);
+  
+  this.ivel.add(this.ia);
+  this.ia.mult(0);
   this.ipos.add(this.ivel);
   
   this.edgeCollision();
@@ -21,8 +28,10 @@ Eye.prototype.draw = function () {
   noStroke();
   fill(255);
   ellipse(this.pos.x, this.pos.y, 2*this.r, 2*this.r);
+  fill(100);
+  ellipse(this.ipos.x, this.ipos.y, 2*this.ir, 2*this.ir);   
   fill(0);
-  ellipse(this.ipos.x, this.ipos.y, 2*this.ir, 2*this.ir); 
+  ellipse(this.ipos.x, this.ipos.y, this.ir, this.ir); 
 }
 
 function inside(n, low, high) {
@@ -45,19 +54,23 @@ Eye.prototype.outsideCollision = function(others) {
   others.forEach(function(other) {
     if(self != other) {
       if (self.pos.dist(other.pos) < self.r + other.r) {
-        var away = p5.Vector.sub(self.pos, other.pos);
-        away.setMag(self.vel.mag());
-        self.vel = away;
+        var pointOfIntersection = p5.Vector.sub(other.pos, self.pos).mult(self.r / (self.r + other.r));
+        // Vary force more then just a staticly scaled?
+        self.a.add(p5.Vector.div(pointOfIntersection, -150));
+        // Apply hard bound
+        // But how?
       }
     }
   });
 }
 
 Eye.prototype.internalCollision = function() {
-  if (this.pos.dist(this.ipos) > (this.r - this.ir)) {
-    var edgePoint = p5.Vector.sub(this.pos, this.ipos);
-    edgePoint.limit(2 * (this.r - this.ir) - edgePoint.mag()); // Compensate for overshoot
-    this.ipos = p5.Vector.sub(this.pos, edgePoint);
-    this.ivel.add(p5.Vector.sub(this.pos, this.ipos).normalize());
+  var edgePoint = p5.Vector.sub(this.ipos, this.pos);
+  if (edgePoint.mag() > (this.r - this.ir)) {
+    // Vary force depending of magnitute of imapt? (Not only f == 1)
+    this.ia.add(p5.Vector.sub(this.pos, this.ipos).normalize());
+    edgePoint.limit(this.r - this.ir);
+    // Apply a hard bound
+    this.ipos = edgePoint.add(this.pos);
   }
 }
