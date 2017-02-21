@@ -1,113 +1,159 @@
 var grid;
-var active = true;
+var player = true; // true: red O, false: green X
+var squares, side;
 
 function setup() {
-  createCanvas(600, 600);
+  createCanvas(600, 600); // Assumed to be square
   grid = new Grid();
-  noFill();
 }
 
 function draw() {
   background(200);
-  var squares = grid.maxSquares() + 2;
-  var step = width / (2 + 2 * squares);
-  
-  // Grid
+  noFill();
+  squares = grid.maxSquares() + 2;
+  side = width / (1 + squares);
+  strokeWeight(side / 10);
+
+  // Draw grid
   stroke(0);
   for (var i = 0; i <= squares + 1; i++) {
-    var z = (2 * i + 1) * step;
+    var z = (i + 0.5) * side;
     line(z, 0, z, width);
     line(0, z, height, z);
   }
   
+  // Store neighbours to draw later
   var O = [];
   var X = [];
-  // Shapes
+  // Draw shapes
   stroke(0);
-  var w = 4 * step;
-  for (var x = grid.xmin; x <= grid.xmax; x++) {
-    var h = 4 * step;
-    for (var y = grid.ymin; y <= grid.ymax; y++) {
-      var v = grid.get(x, y);
-      if (v === "o") {
-        ellipse(w, h, step, step);
-        addNeghbours(O, "o", x, y, w, h, step);
+  for (var gridX = grid.minX; gridX <= grid.maxX; gridX++) {
+    for (var gridY = grid.minY; gridY <= grid.maxY; gridY++) {
+      var v = grid.get(gridX, gridY);
+      if (v === "O") {
+        drawO(gridX, gridY);
+        addNeghbours(O, "O", gridX, gridY);
       } 
-      else if (v === "x") {
-        line(w - step / 2, h - step / 2,
-            w + step / 2, h + step / 2);
-        line(w + step / 2, h - step / 2,
-            w - step / 2, h + step / 2);
-        addNeghbours(X, "x", x, y, w, h, step);
+      else if (v === "X") {
+        drawX(gridX, gridY);
+        addNeghbours(X, "X", gridX, gridY);
       }
-      h += 2 * step;
     }
-    w += 2 * step;
   }
   
-  stroke(255, 0, 0, 100);
-  O.forEach(function(o) {
-    line(o.x1, o.y1, o.x2, o.y2);
-  });
-  
-  stroke(0, 255, 0, 100);
-  X.forEach(function(x) {
-    line(x.x1, x.y1, x.x2, x.y2);
-  });
+  // Draw neighbours lines
+  stroke(playerColor(true, 128));
+  O.forEach(drawLine);
+  stroke(playerColor(false, 128));
+  X.forEach(drawLine);
   
   // Mouse focus
-  stroke(255);
-  if (mouseX > step && mouseX < width - step &&
-     mouseY > step && mouseY < height - step) {
-    var x = floor((mouseX - step) / (2 * step));
-    var y = floor((mouseY - step) / (2 * step)); 
-    var gridX = x + grid.xmin - 1;    
-    var gridY = y + grid.ymin - 1;
-    if (grid.get(gridX, gridY) === undefined) {
-        rect((2 * x + 1) * step, (2 * y + 1) * step, 2 * step, 2 * step);
+  if (!grid.win) {
+    stroke(0, 128);
+    if (mouseOnBoard()) {
+      var gridX = mouse2GridX();    
+      var gridY = mouse2GridY();
+      if (!grid.get(gridX, gridY)) {
+          if (player) {
+            drawO(gridX, gridY);
+          } else {
+            drawX(gridX, gridY);
+          }
+      }
     }
+  }
+  
+  // Draw Winner
+  if (grid.win) {
+    strokeWeight(side / 2);
+    stroke(playerColor(!player, 128));
+    drawLine(grid.win);
+    
+    textAlign(CENTER);
+    textSize(60);
+    strokeWeight(3);
+    stroke(50);
+    // Drop shadow
+    fill(playerColor(player));
+    text(playerSign(!player) + " wins", width / 2 + 3, 3 * height / 4 + 3);
+    fill(playerColor(!player, 255));
+    text(playerSign(!player) + " wins", width / 2, 3 * height / 4);
   }
 }
 
-function addNeghbours(a, v, x, y, w, h, step) {
-  if (grid.get(x - 1, y - 1) === v)
-    a.push({x1: w, y1: h, x2: w - 2*step, y2: h - 2*step});
-  if (grid.get(x, y - 1) === v)
-    a.push({x1: w, y1: h, x2: w, y2: h - 2* step});
-  if (grid.get(x + 1, y - 1) === v)
-    a.push({x1: w, y1: h, x2: w + 2*step, y2: h - 2*step});
-
-  if (grid.get(x - 1, y) === v)
-    a.push({x1: w, y1: h, x2: w - 2*step, y2: h});       
-  if (grid.get(x + 1, y) === v)
-    a.push({x1: w, y1: h, x2: w + 2*step, y2: h});       
-
-  if (grid.get(x - 1, y + 1) === v)
-    a.push({x1: w, y1: h, x2: w - 2*step, y2: h + 2*step});
-  if (grid.get(x, y + 1) === v)
-    a.push({x1: w, y1: h, x2: w, y2: h + 2* step});
-  if (grid.get(x + 1, y + 1) === v)
-    a.push({x1: w, y1: h, x2: w + 2*step, y2: h + 2*step});
+function drawLine(p) {
+  line(grid2X(p.x1), grid2Y(p.y1), grid2X(p.x2), grid2Y(p.y2));
+}
+            
+            
+function grid2X(gridX) {
+  return (gridX - grid.minX + 2) * side;
 }
 
-function toSign(b) {
-  if (b) return "o";
-  return "x";
+function grid2Y(gridY) {
+  return (gridY - grid.minY + 2) * side;
+}
+
+function mouse2GridX() {
+  var uiX = floor((mouseX - side / 2) / side);
+  return uiX + grid.minX - 1;    
+}
+
+function mouse2GridY() {
+  var uiY = floor((mouseY - side / 2) / side); 
+  return uiY + grid.minY - 1;
+}
+
+function drawO(x, y) {
+  ellipse(grid2X(x), grid2Y(y), side / 2, side / 2);
+}
+
+function drawX(x, y) {
+  var xc = grid2X(x) - side / 4;
+  var yc = grid2Y(y) - side / 4;
+  line(xc, yc, xc + side / 2, yc + side / 2);
+  line(xc + side / 2, yc, xc, yc + side / 2);
+}
+
+function addNeghbours(a, v, x, y) {
+  // Enough to add half of the meighbours, the other half is handled by the neighbour
+  if (grid.get(x - 1, y - 1) === v)
+    a.push({x1: x, y1: y, x2: x - 1, y2: y - 1});
+  if (grid.get(x, y - 1) === v)
+    a.push({x1: x, y1: y, x2: x, y2: y - 1});
+  if (grid.get(x + 1, y - 1) === v)
+    a.push({x1: x, y1: y, x2: x + 1, y2: y - 1});
+  if (grid.get(x - 1, y) === v)
+    a.push({x1: x, y1: y, x2: x - 1, y2: y});       
+}
+
+function playerSign(b) {
+  if (b) return "O";
+  return "X";
+}
+
+function playerColor(player, alpha) {
+  if (player) {
+    return color(255, 0, 0, alpha);
+  }
+  return color(0, 255, 0, alpha);
+}
+
+function mouseOnBoard() {
+  var margin = side / 2;
+  return mouseX > margin && mouseX < width - margin &&
+     mouseY > margin && mouseY < height - margin;
 }
       
 function mousePressed() {
-  pressed = createVector(mouseX, mouseY);
-  var squares = grid.maxSquares() + 2;
-  var step = width / (2 + 2 * squares);
-  if (mouseX > step && mouseX < width - step &&
-     mouseY > step && mouseY < height - step) {
-    var x = floor((mouseX - step) / (2 * step));
-    var y = floor((mouseY - step) / (2 * step)); 
-    var gridX = x + grid.xmin - 1;    
-    var gridY = y + grid.ymin - 1;
-    if (grid.get(gridX, gridY) === undefined) {
-      grid.add(gridX, gridY, toSign(active));
-      active = !active;
+  if (!grid.win) {
+    if (mouseOnBoard()) {
+      var gridX =  mouse2GridX();
+      var gridY = mouse2GridY();
+      if (!grid.get(gridX, gridY)) {
+        grid.add(gridX, gridY, playerSign(player));
+        player = !player;
+      }
     }
   }
 }
