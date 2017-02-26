@@ -89,3 +89,7 @@ Grid.prototype.checkForWin = function(x, y, v) {
     return {x1: lowX + 1, y1: highY - 1, x2: highX - 1, y2: lowY + 1};
   }
 }
+
+if (typeof exports !== 'undefined') {
+  exports.Grid = Grid;
+}

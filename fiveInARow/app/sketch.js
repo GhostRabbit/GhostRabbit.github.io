@@ -1,6 +1,6 @@
 var grid;
 var player = true; // true: red O, false: green X
-var squares, side;
+var squares, side; // Cached each frame at global level
 
 function setup() {
   createCanvas(600, 600); // Assumed to be square
