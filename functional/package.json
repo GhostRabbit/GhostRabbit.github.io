@@ -1,0 +1,15 @@
+{
+  "name": "functional",
+  "version": "0.0.0",
+  "description": "Tests to get a some functional code under test with node and mocha",
+  "main": "app/functional.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}
