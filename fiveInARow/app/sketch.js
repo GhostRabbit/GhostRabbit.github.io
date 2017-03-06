@@ -145,7 +145,7 @@ function mouseOnBoard() {
      mouseY > margin && mouseY < height - margin;
 }
       
-function mousePressed() {
+function mouseReleased() {
   if (!grid.win) {
     if (mouseOnBoard()) {
       var gridX =  mouse2GridX();
