@@ -4,3 +4,6 @@
 [submodule "SledgeMan"]
 	path = SledgeMan
 	url = https://github.com/GhostRabbit/SledgeMan
+[submodule "PlanitarySystem"]
+	path = PlanitarySystem
+	url = https://github.com/GhostRabbit/PlanitarySystem
