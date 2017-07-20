@@ -1,3 +1,6 @@
 [submodule "asteroids"]
 	path = asteroids
 	url = https://github.com/GhostRabbit/asteroids
+[submodule "SledgeMan"]
+	path = SledgeMan
+	url = https://github.com/GhostRabbit/SledgeMan
