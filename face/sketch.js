@@ -1,4 +1,4 @@
-var face
+let face
 
 function setup() {
   createCanvas(640, 480)
