@@ -1,25 +1,22 @@
-var nodeCount = 100
-var nodes = []
+const nodeCount = 100
+const nodes = []
 
 function setup() {
   createCanvas(800, 800)
   textAlign(CENTER, CENTER)
-  var ids = []
-  for (var i = 0; i < nodeCount; i++) {
+  let ids = []
+  for (let i = 0; i < nodeCount; i++) {
     ids[i] = "" + i
   }
   ids = shuffle(ids)
-  for (var i = 0; i < nodeCount; i++) {
-    var a = map(i, 0, nodeCount, 0, TWO_PI)
-    var pos = createVector(375 * sin(a), 375 * cos(a))
-    var node = new Node(ids[i], pos)
-    node.neighbours.push((i + 1) % nodeCount)
+  for (let i = 0; i < nodeCount; i++) {
+    const a = map(i, 0, nodeCount, 0, TWO_PI)
+    const pos = createVector(375 * sin(a), 375 * cos(a))
+    const node = new Node(ids[i], pos)
     nodes.push(node)
-    while(node.neighbours.length < 5) {
-      var neighbour = floor(random(0, nodeCount))
-      if (node.neighbours.indexOf(neighbour) == -1) {
-        node.neighbours.push(neighbour)
-      }
+    node.neighbours.add((i + 1) % nodeCount) // Always add next neighbour
+    while (node.neighbours.size < 5) {
+      node.neighbours.add(random(0, nodeCount) | 0)
     }
   }
 }
@@ -28,29 +25,23 @@ function draw() {
   background(51)
   translate(width / 2, height / 2)
   noFill()
-  nodes.forEach((node) =>  {
-    node.draw()
-  })
+  nodes.forEach(node => node.draw())
 }
 
-function Node(id, pos) {
-  this.pos = pos
-  this.r = 15
-  this.id = id
-  this.neighbours = []
-} 
+class Node {
+  constructor(id, pos) {
+    this.pos = pos
+    this.r = 15
+    this.id = id
+    this.neighbours = new Set()
+  }
 
-Node.prototype.draw = function() {
-    push()
-    translate(this.pos.x, this.pos.y)
+  draw() {
     stroke(200, 200, 0)
-    ellipse(0, 0, 2 * this.r, 2 * this.r)
+    ellipse(this.pos.x, this.pos.y, 2 * this.r, 2 * this.r)
     stroke(200, 100)
-    this.neighbours.forEach((i) => {
-      var v = p5.Vector.sub(nodes[i].pos, this.pos)
-      line(0, 0, v.x, v.y)
-    })
+    this.neighbours.forEach(i => line(this.pos.x, this.pos.y, nodes[i].pos.x, nodes[i].pos.y))
     stroke(200, 0, 200)
-    text(this.id, 0, 0)
-    pop()
+    text(this.id, this.pos.x, this.pos.y)
+  }
 }
