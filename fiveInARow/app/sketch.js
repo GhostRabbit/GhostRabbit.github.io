@@ -88,10 +88,10 @@ function draw() {
 
 const drawLine = (p) => line(grid2X(p.x1), grid2Y(p.y1), grid2X(p.x2), grid2Y(p.y2))
 const grid2X = (gridX) => (gridX - grid.minX + 2) * side
+const drawO = (x, y) => ellipse(grid2X(x), grid2Y(y), side / 2, side / 2)
 const grid2Y = (gridY) => (gridY - grid.minY + 2) * side
 const mouse2GridX = () => floor((mouseX - side / 2) / side) + grid.minX - 1
 const mouse2GridY = () => floor((mouseY - side / 2) / side) + grid.minY - 1
-const drawO = (x, y) => ellipse(grid2X(x), grid2Y(y), side / 2, side / 2)
 const playerSign = (b) => b ? "O" : "X"
 const playerColor = (p, a) => p ? color(255, 0, 0, a) : color(0, 255, 0, a)
 
@@ -103,7 +103,7 @@ function drawX(x, y) {
 }
 
 function addNeghbours(a, v, x, y) {
-  // Enough to add half of the meighbours, the other half is handled by the neighbour
+  // Enough to add half of the neighbours, the other half is handled by the neighbour
   if (grid.get(x - 1, y - 1) === v)
     a.push({ x1: x, y1: y, x2: x - 1, y2: y - 1 })
   if (grid.get(x, y - 1) === v)
