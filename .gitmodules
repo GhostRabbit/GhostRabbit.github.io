@@ -9,4 +9,4 @@
 	url = https://github.com/GhostRabbit/PlanetarySystem
 [submodule "NeuralDojo"]
 	path = NeuralDojo
-	url = ./NeuralDojo
+	url = https://github.com/GhostRabbit/NeuralDojo
