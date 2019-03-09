@@ -10,3 +10,6 @@
 [submodule "NeuralDojo"]
 	path = NeuralDojo
 	url = https://github.com/GhostRabbit/NeuralDojo
+[submodule "badlydrawn"]
+	path = badlydrawn
+	url = https://github.com/GhostRabbit/badlydrawn
