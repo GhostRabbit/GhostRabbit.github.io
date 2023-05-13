@@ -13,3 +13,6 @@
 [submodule "badlydrawn"]
 	path = badlydrawn
 	url = https://github.com/GhostRabbit/badlydrawn
+[submodule "set-game"]
+	path = set-game
+	url = https://github.com/GhostRabbit/set-game
