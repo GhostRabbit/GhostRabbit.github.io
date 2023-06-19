@@ -53,8 +53,6 @@ function q(n){
 }
 
 function draw() {
-  console.log(r, t, R)
-  console.log(grid)
   background(255)
   for (let y = 1; y < grid.length; y++) {
     for (let x = 2; x < grid[0].length; x+=2) {
