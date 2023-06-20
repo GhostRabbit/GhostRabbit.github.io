@@ -1,6 +1,7 @@
 let leftP, rightP, ball;
 let score = [0, 0];
 let debries = [];
+let shake = 0
 
 function setup() {
   createCanvas(640, 480);
@@ -13,6 +14,8 @@ function setup() {
 }
 
 function draw() {
+  push()
+  if (--shake >0)translate(random(-shake/10, shake/10), random(-shake/10, shake/10))
   background(0);
   leftP.tick();
   rightP.tick();
@@ -32,6 +35,7 @@ function draw() {
   leftP.draw();
   rightP.draw();
   ball.draw();
+  pop()
 }
 
 function setDashLine(def) {
@@ -62,6 +66,7 @@ function spawnNewBall() {
 
 function addSparks(n) {
   for (let i = 0; i < n; i++) debries.push(new Spark(ball.x, ball.y, i * TAU / n));
+  shake =n*5
 }
 
 function keyPressed() {
